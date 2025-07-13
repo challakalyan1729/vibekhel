@@ -1,0 +1,145 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibekhel</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="/">Vibekhel</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="/browse">Browse Events</a></li>
+                <li><a href="/create">Create Event</a></li>
+                <li class="auth">
+                    <a href="/signin">Sign In</a>
+                    <div class="dropdown">
+                        <a href="/myevents">My Events</a>
+                        <a href="/profile">Profile</a>
+                        <a href="/logout">Log Out</a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+        <div class="search-bar">
+            <input type="text" placeholder="Search sports or locations">
+            <button type="submit">🔍</button>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>Join India’s Street Sports Revolution!</h1>
+            <p>Connect with enthusiasts for gully cricket, kabaddi, chess, volleyball, and more.</p>
+            <div class="sport-icons">🏏🤼♟🏐</div>
+            <a href="#events" class="cta-button">Find Events Near You</a>
+        </section>
+
+        <section id="events" class="upcoming-events">
+            <h2>Upcoming Events</h2>
+            <div class="filters">
+                <select name="sport" id="sport-filter">
+                    <option value="all">All</option>
+                    <option value="cricket">🏏Cricket</option>
+                    <option value="kabaddi">🤼Kabaddi</option>
+                    <option value="chess">♟Chess</option>
+                    <option value="volleyball">🏐Volleyball</option>
+                </select>
+                <div class="location-filter">
+                    <input type="text" placeholder="Search by location">
+                    <button type="submit">Search</button>
+                </div>
+                <select name="date" id="date-filter">
+                    <option value="all">All Dates</option>
+                    <option value="today">Today</option>
+                    <option value="tomorrow">Tomorrow</option>
+                    <option value="sunday">Sunday</option>
+                    <option value="week">This Week</option>
+                </select>
+            </div>
+            <div class="event-list">
+                <!-- Event cards will be dynamically populated here -->
+            </div>
+        </section>
+
+        <section class="create-event">
+            <h2>Create a New Event</h2>
+            <form>
+                <label for="sport">Sport</label>
+                <select name="sport" id="sport">
+                    <option value="gully-cricket">Gully Cricket</option>
+                    <option value="kabaddi">Kabaddi</option>
+                    <option value="chess">Chess</option>
+                    <option value="volleyball">Volleyball</option>
+                </select>
+                <label for="datetime">Date & Time</label>
+                <input type="datetime-local" id="datetime" name="datetime">
+                <label for="venue">Venue</label>
+                <input type="text" id="venue" name="venue" placeholder="Enter venue">
+                <div class="form-actions">
+                    <button type="submit">Create Event</button>
+                    <button type="button" class="cancel">Cancel</button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Vibekhel. All rights reserved.</p>
+        <div class="social-links">
+            <a href="https://facebook.com/vibekhel" target="_blank">Facebook</a>
+            <a href="https://twitter.com/vibekhel" target="_blank">Twitter</a>
+            <a href="https://instagram.com/vibekhel" target="_blank">Instagram</a>
+            <a href="https://maps.app.goo.gl/VagWdqhTn2WTmJJW9?g_st=awb" target="_blank">Chess Location</a>
+        </div>
+        <ul class="footer-links">
+            <li><a href="/about">About</a></li>
+            <li><a href="/help">Help</a></li>
+            <li><a href="/terms">Terms</a></li>
+        </ul>
+    </footer>
+</body>
+</html>
