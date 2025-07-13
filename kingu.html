@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibekhel - Street Sports Community</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #E6F0E6; /* Light green background */
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            transition: transform 0.3s ease;
+        }
+        .header-hover:hover {
+            transform: translateY(-5px);
+            transition: transform 0.3s ease;
+        }
+        #map {
+            height: 300px;
+            width: 100%;
+            border-radius: 8px;
+        }
+        .profile-dropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background: white;
+            border: 1px solid #A9CBA9; /* Soft green border */
+            border-radius: 8px;
+            min-width: 150px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 10; /* Ensure dropdown appears above other content */
+        }
+        /* Adjusted to show dropdown on hover of the specific button, not the entire div */
+        #profileMenuButton:hover + .profile-dropdown,
+        .profile-dropdown:hover {
+            display: block;
+        }
+        header {
+            background-color: #4CAF50; /* Green header */
+            color: white;
+        }
+        button {
+            background-color: #45A049; /* Darker green for buttons */
+            color: white;
+        }
+        button:hover {
+            background-color: #3D8B40; /* Even darker green on hover */
+        }
+        .bg-gray-200 {
+            background-color: #D4E4D4; /* Lighter green for filters */
+        }
+        .hover\:bg-gray-300:hover {
+            background-color: #C6D8C6; /* Slightly darker green on hover for filters */
+        }
+        .bg-green-500 {
+            background-color: #2E7D32; /* Green for active filter */
+        }
+        .hover\:bg-green-600:hover {
+            background-color: #1B5E20; /* Darker green for active filter hover */
+        }
+        .text-gray-600 {
+            color: #388E3C; /* Green text for descriptions */
+        }
+        .text-gray-700 {
+            color: #2F6F2F; /* Darker green for labels */
+        }
+        footer {
+            background-color: #2E7D32; /* Green footer */
+        }
+        .text-gray-300 {
+            color: #C8E6C9; /* Light green for footer links */
+        }
+        .hover\:text-white:hover {
+            color: white; /* White on hover for footer links */
+        }
+        /* Your custom blue-to-green overrides */
+        .bg-blue-500 {
+            background-color: #2E7D32;
+        }
+        .hover\:bg-blue-600:hover {
+            background-color: #1B5E20;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <header class="bg-white shadow-md">
+        <nav class="container mx-auto flex justify-center items-center py-4 px-6 space-x-6">
+            <div class="text-2xl font-bold text-gray-800 header-hover">Vibekhel</div>
+            <button id="browseEventsBtn" class="text-gray-600 hover:text-gray-800 header-hover">Browse Events</button>
+            <button id="createEventBtn" class="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 header-hover">Create Event</button>
+            <div class="relative group"> <button id="profileMenuButton" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 header-hover">Sign In</button>
+                <div class="profile-dropdown group-hover:block">
+                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">My Events</a>
+                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Profile</a>
+                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Log Out</a>
+                </div>
+            </div>
+            <div class="relative">
+                <input id="globalSearch" type="text" placeholder="Search sports, locations..." class="p-2 border rounded-lg w-64">
+                <button id="globalSearchBtn" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <section class="container mx-auto py-20 text-center">
+        <h1 class="text-4xl font-bold text-gray-800 mb-4">Join India’s Street Sports Revolution!</h1>
+        <p class="text-lg text-gray-600 mb-6">Connect with enthusiasts for gully cricket, kabaddi, chess, volleyball, and more.</p>
+        <div class="flex justify-center space-x-4">
+            <span class="text-4xl">🏏🤼♟🏐</span>
+        </div>
+        <button id="findEventsBtn" class="mt-6 bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600">Find Events Near You</button>
+    </section>
+
+    <section id="eventsSection" class="container mx-auto py-8">
+        <h2 class="text-3xl font-bold mb-6">Upcoming Events</h2>
+        <div class="mb-4 flex flex-wrap gap-4 items-center">
+            <span class="text-gray-600">Filter by Sport</span>
+            <div id="sportFilterButtons" class="flex flex-wrap gap-2">
+                <button class="bg-gray-200 text-gray-800 px-3 py-1 rounded-full hover:bg-gray-300 flex items-center active-filter" data-sport="all">All</button>
+                <button class="bg-gray-200 text-gray-800 px-3 py-1 rounded-full hover:bg-gray-300 flex items-center" data-sport="cricket"><span class="mr-1">🏏</span>Cricket</button>
+                <button class="bg-gray-200 text-gray-800 px-3 py-1 rounded-full hover:bg-gray-300 flex items-center" data-sport="kabaddi"><span class="mr-1">🤼</span>Kabaddi</button>
+                <button class="bg-gray-200 text-gray-800 px-3 py-1 rounded-full hover:bg-gray-300 flex items-center" data-sport="chess"><span class="mr-1">♟</span>Chess</button>
+                <button class="bg-gray-200 text-gray-800 px-3 py-1 rounded-full hover:bg-gray-300 flex items-center" data-sport="volleyball"><span class="mr-1">🏐</span>Volleyball</button>
+            </div>
+            <div class="flex items-center">
+                <input id="locationSearch" type="text" placeholder="Search by location" class="p-2 border rounded-l">
+                <button id="searchLocationBtn" class="bg-green-500 text-white px-4 py-2 rounded-r hover:bg-green-600">Search</button>
+            </div>
+            <div class="flex items-center">
+                <select id="dateFilter" class="p-2 border rounded">
+                    <option value="all">All Dates</option>
+                    <option value="today">Today</option>
+                    <option value="tomorrow">Tomorrow</option>
+                    <option value="this_sunday">This Sunday</option>
+                </select>
+            </div>
+        </div>
+        <div id="eventsGrid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            </div>
+        <p id="noEventsMessage" class="text-gray-600 text-center mt-8 hidden">No events found matching your criteria.</p>
+    </section>
+
+    <section id="createEventSection" class="container mx-auto py-8 hidden">
+        <h2 class="text-3xl font-bold mb-4">Create a New Event</h2>
+        <form id="eventForm" class="bg-white p-6 rounded-lg shadow-md">
+            <div class="mb-4">
+                <label for="sport" class="block text-gray-700">Sport</label>
+                <select id="sport" class="w-full p-2 border rounded">
+                    <option value="cricket">Gully Cricket</option>
+                    <option value="kabaddi">Kabaddi</option>
+                    <option value="chess">Chess</option>
+                    <option value="volleyball">Volleyball</option>
+                </select>
+            </div>
+            <div class="mb-4">
+                <label for="datetime" class="block text-gray-700">Date & Time</label>
+                <input type="datetime-local" id="datetime" class="w-full p-2 border rounded" required>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700">Venue</label>
+                <div id="map"></div>
+                <input type="text" id="venue" class="w-full p-2 border rounded mt-2" placeholder="Enter venue name or pick on map" required>
+            </div>
+            <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Create Event</button>
+            <button type="button" id="cancelBtn" class="bg-gray-500 text-white px-4 py-2 rounded ml-2 hover:bg-gray-600">Cancel</button>
+        </form>
+    </section>
+
+    <footer class="bg-gray-800 text-white py-6 mt-8">
+        <div class="container mx-auto text-center">
+            <p>© 2025 Vibekhel. All rights reserved.</p>
+            <div class="mt-2 flex justify-center space-x-4">
+                <a href="https://www.youtube.com/@Vibekhel_official" target="_blank" class="text-gray-300 hover:text-white">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 4-8 4z"/>
+                    </svg>
+                </a>
+                <a href="https://www.instagram.com/vibekhel?igsh=MjliaTlqMTVtMzc=" target="_blank" class="text-gray-300 hover:text-white">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.318 3.608 1.293.975.975 1.231 2.242 1.293 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.062 1.366-.318 2.633-1.293 3.608-.975.975-2.242 1.231-3.608 1.293-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.318-3.608-1.293-.975-.975-1.231-2.242-1.293-3.608-.058-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.062-1.366.318-2.633 1.293-3.608.975-.975 2.242-1.231 3.608-1.293 1.266-.058 1.646-.07 4.85-.07zm0 2.163c-3.184 0-3.616.013-4.887.072-1.251.057-2.157.273-2.964.64-.892.396-1.621 1.125-2.017 2.017-.367.807-.583 1.713-.64 2.964-.059 1.271-.072 1.703-.072 4.887s.013 3.616.072 4.887c.057 1.251.273 2.157.64 2.964.396.892 1.125 1.621 2.017 2.017.807.367 1.713.583 2.964.64 1.271.059 1.703.072 4.887.072s3.616-.013 4.887-.072c1.251-.057 2.157-.273 2.964-.64.892-.396 1.621-1.125 2.017-2.017.367-.807.583-1.713.64-2.964.059-1.271.072-1.703.072-4.887s-.013-3.616-.072-4.887c-.057-1.251-.273-2.157-.64-2.964-.396-.892-1.125-1.621-2.017-2.017-.807-.367-1.713-.583-2.964-.64-1.271-.059-1.703-.072-4.887-.072zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.791-4-4s1.791-4 4-4 4 1.791 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441-.645-1.441-1.44s.645-1.441 1.441-1.441c.796 0 1.441.645 1.441 1.441s-.645 1.44-1.441 1.44z"/>
+                    </svg>
+                </a>
+                <a href="https://www.linkedin.com/posts/challakalyan1729_gullysports-cricket-football-activity-7345925472414855169-qiJT?utm_source=share&utm_medium=member_desktop&rcm=ACoAAEjZwRIBRrM99Jidq7lDaJCbuzPmhrb0nWQ" target="_blank" class="text-gray-300 hover:text-white">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-1.337-.012-3.05-1.862-3.05-1.863 0-2.148 1.452-2.148 2.956v5.698h-3v-11h2.879v1.548h.041c.398-.753 1.367-1.544 2.807-1.544 3.008 0 3.562 1.972 3.562 4.539v6.457z"/>
+                    </svg>
+                </a>
+                <a href="https://x.com/Vibekhel?t=P7eO2PizXhDNeL9t1c3IYg&s=09" target="_blank" class="text-gray-300 hover:text-white">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                    </svg>
+                </a>
+            </div>
+            <div class="mt-2">
+                <a href="#" class="text-gray-300 hover:text-white mx-2">About</a>
+                <a href="#" class="text-gray-300 hover:text-white mx-2">Help</a>
+                <a href="#" class="text-gray-300 hover:text-white mx-2">Terms</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Use a consistent time for demonstrations or fetch from server
+        // Current time for reference: Sunday, July 13, 2025 at 1:43:44 PM IST.
+        const now = new Date('2025-07-13T13:43:44+05:30'); // Set a fixed date for consistency in testing
+        const todayStr = now.toISOString().split('T')[0];
+
+        const tomorrow = new Date(now);
+        tomorrow.setDate(now.getDate() + 1);
+        const tomorrowStr = tomorrow.toISOString().split('T')[0];
+
+        const thisSunday = new Date(now);
+        thisSunday.setDate(now.getDate() + (7 - now.getDay()) % 7); // Calculate coming Sunday
+        const thisSundayStr = thisSunday.toISOString().split('T')[0];
+
+        // Sample event data - ideally fetched from an API
+        let events = [
+            { id: 1, sport: 'cricket', title: 'Gully Cricket Showdown', location: 'Local Ground, Delhi', date: '2025-07-13T16:00:00+05:30', image: 'https://staticg.sportskeeda.com/wp-content/uploads/2015/10/gully-cricket-2-1444811281-800.jpg' },
+            { id: 2, sport: 'kabaddi', title: 'Kabaddi Clash', location: 'Hussainpuram, Samalkot', date: '2025-07-14T18:00:00+05:30', image: 'https://elcuoh.in/wp-content/uploads/2020/06/about-kabaddi-540x360.jpg' },
+            { id: 3, sport: 'chess', title: 'Evening Chess Session', location: 'Central Park, Mumbai', date: '2025-07-13T19:30:00+05:30', image: 'https://images.chesscomfiles.com/uploads/v1/images_users/tiny_mce/davidkaufmann/phpKe8298.jpeg' },
+            { id: 4, sport: 'chess', title: 'Street Chess Tournament', location: 'Community Center, Chennai', date: '2025-07-15T10:00:00+05:30', image: 'https://images.chesscomfiles.com/uploads/v1/images_users/tiny_mce/davidkaufmann/phpKe8298.jpeg' },
+            { id: 5, sport: 'volleyball', title: 'Volleyball Match', location: 'School Ground, Kolkata', date: '2025-07-20T17:00:00+05:30', image: 'https://tse1.mm.bing.net/th/id/OIP.7RvWy4-LuoZuLIgxMQTF1gHaEK?r=0&rs=1&pid=ImgDetMain&o=7&rm=3' }
+        ];
+
+        // Function to render a single event card
+        function createEventCard(event) {
+            const card = document.createElement('div');
+            card.className = 'bg-white p-4 rounded-lg shadow-md card-hover';
+
+            const eventDateTime = new Date(event.date);
+            const eventTime = eventDateTime.toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit' });
+            const eventDate = eventDateTime.toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'long', year: 'numeric' });
+
+            card.innerHTML = `
+                <img src="${event.image}" alt="${event.title}" class="w-full h-40 object-cover rounded-md mb-4">
+                <h3 class="text-lg font-semibold">${event.title}</h3>
+                <p class="text-gray-600 text-sm">📍 ${event.location}</p>
+                <p class="text-gray-600 text-sm">📅 ${eventDate}</p>
+                <p class="text-gray-600 text-sm">⏰ ${eventTime}</p>
+            `;
+            return card;
+        }
+
+        // Function to display events based on filters
+        function displayEvents(sportFilter = 'all', locationSearch = '', dateFilter = 'all', currentEvents = events) {
+            const eventsGrid = document.getElementById('eventsGrid');
+            const noEventsMessage = document.getElementById('noEventsMessage');
+            eventsGrid.innerHTML = ''; // Clear previous events
+
+            let filteredEvents = currentEvents;
+
+            // Apply sport filter
+            if (sportFilter !== 'all') {
+                filteredEvents = filteredEvents.filter(event => event.sport === sportFilter);
+            }
+
+            // Apply location search
+            if (locationSearch) {
+                filteredEvents = filteredEvents.filter(event =>
+                    event.location.toLowerCase().includes(locationSearch.toLowerCase()) ||
+                    event.title.toLowerCase().includes(locationSearch.toLowerCase()) // Also search in title for location if applicable
+                );
+            }
+
+            // Apply date filter
+            if (dateFilter !== 'all') {
+                filteredEvents = filteredEvents.filter(event => {
+                    const eventDate = new Date(event.date).toISOString().split('T')[0];
+                    if (dateFilter === 'today' && eventDate !== todayStr) return false;
+                    if (dateFilter === 'tomorrow' && eventDate !== tomorrowStr) return false;
+                    if (dateFilter === 'this_sunday' && eventDate !== thisSundayStr) return false;
+                    return true;
+                });
+            }
+
+            if (filteredEvents.length > 0) {
+                filteredEvents.forEach(event => {
+                    eventsGrid.appendChild(createEventCard(event));
+                });
+                noEventsMessage.classList.add('hidden');
+            } else {
+                noEventsMessage.classList.remove('hidden');
+            }
+        }
+
+        // Initialize Google Maps
+        function initMap() {
+            const map = new google.maps.Map(document.getElementById("map"), {
+                center: { lat: 20.5937, lng: 78.9629 }, // India center
+                zoom: 5,
+            });
+            const marker = new google.maps.Marker({ map, draggable: true });
+
+            google.maps.event.addListener(map, 'click', (event) => {
+                marker.setPosition(event.latLng);
+                // Reverse geocoding would be ideal here to get a readable address
+                document.getElementById('venue').value = `Lat: ${event.latLng.lat()}, Lng: ${event.latLng.lng()}`;
+            });
+        }
+
+        // Event Listeners
+        document.getElementById('findEventsBtn').addEventListener('click', () => {
+            document.getElementById('eventsSection').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        document.getElementById('browseEventsBtn').addEventListener('click', () => {
+            document.getElementById('eventsSection').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        document.getElementById('createEventBtn').addEventListener('click', () => {
+            document.getElementById('createEventSection').classList.remove('hidden');
+            // Ensure map initializes when section becomes visible
+            if (typeof google !== 'undefined' && typeof google.maps !== 'undefined') {
+                 initMap();
+            }
+        });
+
+        document.getElementById('cancelBtn').addEventListener('click', () => {
+            document.getElementById('createEventSection').classList.add('hidden');
+            document.getElementById('eventForm').reset();
+        });
+
+        document.getElementById('eventForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const sport = document.getElementById('sport').value;
+            const datetime = document.getElementById('datetime').value;
+            const venue = document.getElementById('venue').value;
+
+            const newEvent = {
+                id: events.length > 0 ? Math.max(...events.map(event => event.id)) + 1 : 1, // Generate unique ID
+                sport,
+                title: `${sport.charAt(0).toUpperCase() + sport.slice(1)} Meetup`,
+                location: venue,
+                date: datetime,
+                image: `https://via.placeholder.com/300x200?text=${sport.charAt(0).toUpperCase() + sport.slice(1)}+Meetup`
+            };
+            events.push(newEvent);
+            displayEvents(); // Re-display all events including the new one
+            document.getElementById('createEventSection').classList.add('hidden');
+            document.getElementById('eventForm').reset();
+            alert('Event created successfully!');
+        });
+
+        // Event delegation for sport filter buttons
+        document.getElementById('sportFilterButtons').addEventListener('click', (e) => {
+            if (e.target.tagName === 'BUTTON' && e.target.hasAttribute('data-sport')) {
+                // Remove active class from all buttons
+                document.querySelectorAll('#sportFilterButtons button').forEach(btn => {
+                    btn.classList.remove('bg-green-500', 'text-white', 'active-filter');
+                    btn.classList.add('bg-gray-200', 'text-gray-800');
+                });
+                // Add active class to the clicked button
+                e.target.classList.add('bg-green-500', 'text-white', 'active-filter');
+                e.target.classList.remove('bg-gray-200', 'text-gray-800');
+
+                const currentSportFilter = e.target.getAttribute('data-sport');
+                const currentLocationSearch = document.getElementById('locationSearch').value;
+                const currentDateFilter = document.getElementById('dateFilter').value;
+                displayEvents(currentSportFilter, currentLocationSearch, currentDateFilter);
+            }
+        });
+
+        document.getElementById('searchLocationBtn').addEventListener('click', () => {
+            const currentSportFilter = document.querySelector('#sportFilterButtons .active-filter')?.getAttribute('data-sport') || 'all';
+            const currentLocationSearch = document.getElementById('locationSearch').value;
+            const currentDateFilter = document.getElementById('dateFilter').value;
+            displayEvents(currentSportFilter, currentLocationSearch, currentDateFilter);
+        });
+
+        document.getElementById('dateFilter').addEventListener('change', () => {
+            const currentSportFilter = document.querySelector('#sportFilterButtons .active-filter')?.getAttribute('data-sport') || 'all';
+            const currentLocationSearch = document.getElementById('locationSearch').value;
+            const currentDateFilter = document.getElementById('dateFilter').value;
+            displayEvents(currentSportFilter, currentLocationSearch, currentDateFilter);
+        });
+
+        document.getElementById('globalSearchBtn').addEventListener('click', () => {
+            const searchTerm = document.getElementById('globalSearch').value.toLowerCase();
+            // Reset filters to "All" when global searching
+            document.querySelectorAll('#sportFilterButtons button').forEach(btn => {
+                btn.classList.remove('bg-green-500', 'text-white', 'active-filter');
+                btn.classList.add('bg-gray-200', 'text-gray-800');
+            });
+            document.querySelector('#sportFilterButtons [data-sport="all"]').classList.add('bg-green-500', 'text-white', 'active-filter');
+            document.querySelector('#sportFilterButtons [data-sport="all"]').classList.remove('bg-gray-200', 'text-gray-800');
+
+            document.getElementById('locationSearch').value = ''; // Clear location search
+            document.getElementById('dateFilter').value = 'all'; // Reset date filter
+
+            // Perform a broad search across all event properties
+            let globallyFilteredEvents = events.filter(event =>
+                event.sport.toLowerCase().includes(searchTerm) ||
+                event.location.toLowerCase().includes(searchTerm) ||
+                event.title.toLowerCase().includes(searchTerm)
+            );
+            displayEvents('all', '', 'all', globallyFilteredEvents); // Pass the specifically filtered list
+        });
+
+
+        // Profile Menu Button functionality
+        const profileMenuButton = document.getElementById('profileMenuButton');
+        profileMenuButton.addEventListener('click', () => {
+            // In a real app, this would trigger a sign-in modal or redirect
+            if (profileMenuButton.textContent === 'Sign In') {
+                alert('Redirecting to Sign In page... (Mock)');
+                profileMenuButton.textContent = 'Profile'; // Simulate successful sign-in
+            } else {
+                // If already signed in, clicking it could toggle the dropdown for non-hover users
+                const dropdown = profileMenuButton.nextElementSibling;
+                if (dropdown && dropdown.classList.contains('profile-dropdown')) {
+                    dropdown.classList.toggle('hidden'); // Simple toggle, Tailwind's group-hover already handles hover
+                }
+            }
+        });
+
+
+        // Initial display of events when the page loads
+        displayEvents();
+
+        // Load Google Maps script
+        window.initMap = initMap;
+        const script = document.createElement('script');
+        // Replace 'YOUR_API_KEY' with your actual Google Maps API Key
+        script.src = `https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap`;
+        script.async = true;
+        document.head.appendChild(script);
+    </script>
+</body>
+</html>
