@@ -1,0 +1,195 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Learn about Vibekhel, India's leading platform for street sports events like gully cricket, kabaddi, chess, and volleyball.">
+    <meta name="keywords" content="Vibekhel, about, street sports, India, gully cricket, kabaddi, chess, volleyball">
+    <meta name="author" content="Vibekhel">
+    <title>About Vibekhel - India’s Street Sports Revolution</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="/favicon.png">
+</head>
+<body class="bg-gray-100 font-sans">
+    <header class="bg-green-100 text-green-800 shadow-md py-4">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold">Vibekhel</h1>
+            <nav class="flex space-x-4">
+                <a href="index.html" class="hover:underline">Browse Events</a>
+                <a href="#" class="hover:underline">+ Create Event</a>
+                <a href="#" class="hover:underline">Sign In</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="bg-green-800 text-white py-12 text-center">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl font-bold mb-4">Join India’s Street Sports Revolution!</h2>
+                <p class="text-lg mb-4">Connect with enthusiasts for gully cricket, kabaddi, chess, volleyball, and more.</p>
+                <div class="flex justify-center space-x-2 mb-4">
+                    <span>🏏</span><span>🤼</span><span>♟</span><span>🏐</span>
+                </div>
+                <a href="index.html#events" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Find Events Near You</a>
+            </div>
+        </section>
+
+        <section class="container mx-auto px-4 py-8">
+            <h2 class="text-2xl font-bold mb-4 text-green-800">About Vibekhel</h2>
+            <p class="mb-4">Vibekhel is dedicated to bringing together street sports enthusiasts across India. Our mission is to create a vibrant community where players of gully cricket, kabaddi, chess, volleyball, and more can connect, compete, and celebrate the spirit of local sports.</p>
+            <p class="mb-4">Founded with a passion for grassroots sports, Vibekhel provides a platform to discover events, organize matches, and build lasting friendships. Join us in revolutionizing how street sports are experienced in India!</p>
+        </section>
+
+        <section class="container mx-auto px-4 py-8">
+            <h2 class="text-2xl font-bold mb-4 text-green-800">Upcoming Events</h2>
+            <p class="text-gray-600 mb-4">Discover exciting street sports events happening in your area. Join the community and make new friends!</p>
+            <div class="flex flex-wrap gap-4 mb-4">
+                <button class="px-3 py-1 border rounded hover:bg-green-500 hover:text-white" data-filter="all">All Sports</button>
+                <button class="px-3 py-1 border rounded hover:bg-green-500 hover:text-white" data-filter="cricket">Cricket</button>
+                <button class="px-3 py-1 border rounded hover:bg-green-500 hover:text-white" data-filter="kabaddi">Kabaddi</button>
+                <button class="px-3 py-1 border rounded hover:bg-green-500 hover:text-white" data-filter="chess">Chess</button>
+                <button class="px-3 py-1 border rounded hover:bg-green-500 hover:text-white" data-filter="volleyball">Volleyball</button>
+                <input type="text" placeholder="Search events..." class="px-3 py-1 border rounded">
+                <select class="px-3 py-1 border rounded">
+                    <option>All Dates</option>
+                    <option>Today</option>
+                    <option>Tomorrow</option>
+                    <option>This Week</option>
+                </select>
+            </div>
+            <div id="event-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="bg-white p-4 rounded shadow" data-category="cricket">
+                    <img src="https://via.placeholder.com/300x200" alt="Gully Cricket Championship" class="w-full h-32 object-cover rounded-t">
+                    <h3 class="text-lg font-semibold mt-2">Gully Cricket Championship</h3>
+                    <p class="text-gray-600">Organized by Vettapalem Sports Club</p>
+                    <p class="text-gray-600">📍 High School Ground, Vettapalem</p>
+                    <p class="text-gray-600">📅 12 July 2025 | ⏰ 09:30 pm</p>
+                    <p class="text-gray-600">👥 24/40 participants</p>
+                    <a href="#" class="bg-green-600 text-white px-3 py-1 rounded mt-2 inline-block hover:bg-green-700">Join Event</a>
+                </div>
+                <div class="bg-white p-4 rounded shadow" data-category="kabaddi">
+                    <img src="https://via.placeholder.com/300x200" alt="Traditional Kabaddi Match" class="w-full h-32 object-cover rounded-t">
+                    <h3 class="text-lg font-semibold mt-2">Traditional Kabaddi Match</h3>
+                    <p class="text-gray-600">Organized by Samalkot Youth Association</p>
+                    <p class="text-gray-600">📍 Junior College Ground, Samalkot</p>
+                    <p class="text-gray-600">📅 13 July 2025 | ⏰ 11:30 pm</p>
+                    <p class="text-gray-600">👥 16/20 participants</p>
+                    <a href="#" class="bg-green-600 text-white px-3 py-1 rounded mt-2 inline-block hover:bg-green-700">Join Event</a>
+                </div>
+                <div class="bg-white p-4 rounded shadow" data-category="chess">
+                    <img src="https://via.placeholder.com/300x200" alt="Street Chess Tournament" class="w-full h-32 object-cover rounded-t">
+                    <h3 class="text-lg font-semibold mt-2">Street Chess Tournament</h3>
+                    <p class="text-gray-600">Organized by Samalkot Chess Club</p>
+                    <p class="text-gray-600">📍 Community Center, Samalkot</p>
+                    <p class="text-gray-600">📅 14 July 2025 | ⏰ 03:30 pm</p>
+                    <p class="text-gray-600">👥 32/40 participants</p>
+                    <a href="#" class="bg-green-600 text-white px-3 py-1 rounded mt-2 inline-block hover:bg-green-700">Join Event</a>
+                </div>
+                <div class="bg-white p-4 rounded shadow" data-category="volleyball">
+                    <img src="https://via.placeholder.com/300x200" alt="Beach Volleyball Fest" class="w-full h-32 object-cover rounded-t">
+                    <h3 class="text-lg font-semibold mt-2">Beach Volleyball Fest</h3>
+                    <p class="text-gray-600">Organized by Coastal Sports Foundation</p>
+                    <p class="text-gray-600">📍 Beach Court, Vettapalem</p>
+                    <p class="text-gray-600">📅 15 July 2025 | ⏰ 10:30 pm</p>
+                    <p class="text-gray-600">👥 18/24 participants</p>
+                    <a href="#" class="bg-green-600 text-white px-3 py-1 rounded mt-2 inline-block hover:bg-green-700">Join Event</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-green-800 text-white py-6">
+        <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
+            <div>
+                <h3 class="text-xl font-semibold">Vibekhel</h3>
+                <p class="mt-2">Connecting India’s street sports community, one game at a time.</p>
+            </div>
+            <div class="flex space-x-6 mt-4 md:mt-0">
+                <div>
+                    <h4 class="font-semibold">Quick Links</h4>
+                    <ul class="mt-2 space-y-1">
+                        <li><a href="about.html" class="hover:underline">About Us</a></li>
+                        <li><a href="#" class="hover:underline">How It Works</a></li>
+                        <li><a href="#" class="hover:underline">Community Guidelines</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold">Support</h4>
+                    <ul class="mt-2 space-y-1">
+                        <li><a href="#" class="hover:underline">Help Center</a></li>
+                        <li><a href="#" class="hover:underline">Contact Us</a></li>
+                        <li><a href="#" class="hover:underline">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold">Follow Us</h4>
+                    <ul class="mt-2 space-y-1 flex space-x-4">
+                        <li><a href="https://youtube.com/@vibe-khel?si=BclsdaDT-Lvhptej" class="hover:underline" target="_blank">YouTube</a></li>
+                        <li><a href="https://www.instagram.com/vibekhel?utm_source=qr&igsh=MjliaTlqMTVtMzc=" class="hover:underline" target="_blank">Instagram</a></li>
+                        <li><a href="https://x.com/Vibekhel?t=P7eO2PizXhDNeL9t1c3IYg&s=09" class="hover:underline" target="_blank">X (Twitter)</a></li>
+                    </ul>
+                </div>
+            </div>
+            <p class="mt-4 md:mt-0">© 2025 Vibekhel. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Event filter functionality
+        document.querySelectorAll('button[data-filter]').forEach(button => {
+            button.addEventListener('click', () => {
+                document.querySelectorAll('button[data-filter]').forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                const category = button.dataset.filter;
+                const events = document.querySelectorAll('.bg-white');
+                events.forEach(event => {
+                    if (category === 'all' || event.dataset.category === category) {
+                        event.style.display = 'block';
+                    } else {
+                        event.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
