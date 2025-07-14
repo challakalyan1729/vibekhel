@@ -1,0 +1,194 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Join India's street sports revolution with Vibekhel. Find and create events for gully cricket, kabaddi, chess, volleyball, and more.">
+    <meta name="keywords" content="Vibekhel, street sports, gully cricket, kabaddi, chess, volleyball, India sports events">
+    <meta name="author" content="Vibekhel">
+    <title>Vibekhel - India’s Street Sports Revolution</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <style>
+        .filter-btn.active { background-color: #3b82f6; color: white; }
+        .event-card { transition: transform 0.2s; }
+        .event-card:hover { transform: scale(1.05); }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    <!-- Header -->
+    <header class="bg-blue-600 text-white sticky top-0 z-10 shadow-md">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold"><a href="/">Vibekhel</a></h1>
+            <nav class="flex items-center space-x-4">
+                <a href="#events" class="hover:underline">Browse Events</a>
+                <a href="#create-event" class="hover:underline">Create Event</a>
+                <div class="relative group">
+                    <button class="hover:underline focus:outline-none">Sign In ▼</button>
+                    <div class="absolute hidden group-hover:block bg-white text-black shadow-lg rounded mt-2">
+                        <a href="/my-events" class="block px-4 py-2 hover:bg-gray-200">My Events</a>
+                        <a href="/profile" class="block px-4 py-2 hover:bg-gray-200">Profile</a>
+                        <a href="/logout" class="block px-4 py-2 hover:bg-gray-200">Log Out</a>
+                    </div>
+                </div>
+                <div class="relative">
+                    <input type="text" placeholder="Search events..." class="px-4 py-2 rounded-full text-black focus:outline-none">
+                    <span class="absolute right-3 top-2">🔍</span>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="bg-blue-700 text-white py-16 text-center">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold mb-4">Join India’s Street Sports Revolution!</h2>
+            <p class="text-lg mb-6">Connect with enthusiasts for gully cricket, kabaddi, chess, volleyball, and more.</p>
+            <p class="text-2xl mb-6">🏏🤼♟🏐</p>
+            <a href="#events" class="bg-yellow-400 text-black px-6 py-3 rounded-full font-semibold hover:bg-yellow-500">Find Events Near You</a>
+        </div>
+    </section>
+
+    <!-- Events Section -->
+    <section id="events" class="container mx-auto px-4 py-12">
+        <h2 class="text-3xl font-bold mb-6">Upcoming Events</h2>
+        <!-- Filters -->
+        <div class="flex flex-wrap gap-4 mb-8">
+            <div>
+                <button class="filter-btn px-4 py-2 border rounded hover:bg-blue-500 hover:text-white active" data-filter="all">All</button>
+                <button class="filter-btn px-4 py-2 border rounded hover:bg-blue-500 hover:text-white" data-filter="cricket">🏏 Cricket</button>
+                <button class="filter-btn px-4 py-2 border rounded hover:bg-blue-500 hover:text-white" data-filter="kabaddi">🤼 Kabaddi</button>
+                <button class="filter-btn px-4 py-2 border rounded hover:bg-blue-500 hover:text-white" data-filter="chess">♟ Chess</button>
+                <button class="filter-btn px-4 py-2 border rounded hover:bg-blue-500 hover:text-white" data-filter="volleyball">🏐 Volleyball</button>
+            </div>
+            <div>
+                <select class="px-4 py-2 border rounded">
+                    <option>All Dates</option>
+                    <option>Today</option>
+                    <option>Tomorrow</option>
+                    <option>Sunday</option>
+                    <option>This Week</option>
+                </select>
+            </div>
+            <input type="text" placeholder="Search events..." class="px-4 py-2 border rounded">
+        </div>
+        <!-- Event Cards (Sample) -->
+        <div id="event-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Sample Event Card -->
+            <div class="event-card bg-white p-6 rounded-lg shadow-md" data-category="cricket">
+                <h3 class="text-xl font-semibold">Gully Cricket Match</h3>
+                <p class="text-gray-600">Date: July 20, 2025 | Time: 4:00 PM</p>
+                <p class="text-gray-600">Venue: Mumbai Street Ground</p>
+                <a href="#" class="text-blue-600 hover:underline">View Details</a>
+            </div>
+            <!-- Add more event cards dynamically -->
+        </div>
+    </section>
+
+    <!-- Create Event Section -->
+    <section id="create-event" class="bg-gray-200 py-12">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-6 text-center">Create a New Event</h2>
+            <form class="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md">
+                <div class="mb-4">
+                    <label for="sport" class="block text-gray-700 font-semibold">Sport</label>
+                    <select id="sport" class="w-full px-4 py-2 border rounded">
+                        <option>G16>Gully Cricket</option>
+                        <option>Kabaddi</option>
+                        <option>Chess</option>
+                        <option>Volleyball</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="datetime" class="block text-gray-700 font-semibold">Date & Time</label>
+                    <input type="datetime-local" id="datetime" class="w-full px-4 py-2 border rounded">
+                </div>
+                <div class="mb-4">
+                    <label for="venue" class="block text-gray-700 font-semibold">Venue</label>
+                    <input type="text" id="venue" class="w-full px-4 py-2 border rounded" placeholder="Enter venue details">
+                </div>
+                <div class="flex justify-between">
+                    <button type="button" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">Create Event</button>
+                    <button type="button" class="bg-gray-400 text-white px-6 py-2 rounded hover:bg-gray-500">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-blue-600 text-white py-6">
+        <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
+            <p>&copy; 2025 Vibekhel. All rights reserved.</p>
+            <div class="flex space-x-4 mt-4 md:mt-0">
+                <a href="#" class="hover:underline">Facebook</a>
+                <a href="#" class="hover:underline">Twitter</a>
+                <a href="#" class="hover:underline">Instagram</a>
+                <a href="#" class="hover:underline">Chess Location</a>
+            </div>
+            <div class="flex space-x-4 mt-4 md:mt-0">
+                <a href="/about" class="hover:underline">About</a>
+                <a href="/help" class="hover:underline">Help</a>
+                <a href="/terms" class="hover:underline">Terms</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Basic filter functionality
+        document.querySelectorAll('.filter-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                const category = button.dataset.filter;
+                const events = document.querySelectorAll('.event-card');
+                events.forEach(event => {
+                    if (category === 'all' || event.dataset.category === category) {
+                        event.style.display = 'block';
+                    } else {
+                        event.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
