@@ -1,0 +1,17 @@
+const { Pool } = require('pg');
+const pool = new Pool({ connectionString: process.env.NETLIFY_DATABASE_URL_UNPOOLED });
+
+exports.handler = async () => {
+  try {
+    const result = await pool.query('SELECT * FROM events');
+    return {
+      statusCode: 200,
+      body: JSON.stringify(result.rows),
+    };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: error.message }),
+    };
+  }
+};
