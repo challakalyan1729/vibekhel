@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Vibekhel - India's premier street sports community for gully cricket, kabaddi, chess, and volleyball.">
+  <title>Vibekhel - Street Sports Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1a365d;
+      --primary-light: #2d5a87;
+      --accent: #38bdf8;
+      --accent-hover: #0ea5e9;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --error: #ef4444;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-300: #d1d5db;
+      --gray-400: #9ca3af;
+      --gray-500: #6b7280;
+      --gray-600: #4b5563;
+      --gray-700: #374151;
+      --gray-800: #1f2937;
+      --gray-900: #111827;
+      --white: #ffffff;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      --border-radius: 0.5rem;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, var(--gray-50) 0%, var(--gray-100) 100%);
+      color: var(--gray-800);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Header */
+    header {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--gray-200);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      transition: var(--transition);
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 70px;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo::before {
+      content: "⚽";
+      font-size: 1.5rem;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-10px); }
+      60% { transform: translateY(-5px); }
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 0.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      padding: 0.5rem 1rem;
+      text-decoration: none;
+      color: var(--gray-700);
+      border-radius: var(--border-radius);
+      transition: var(--transition);
+      font-weight: 500;
+      position: relative;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary);
+      background: var(--gray-100);
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: var(--border-radius);
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: white;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .btn-secondary {
+      background: var(--white);
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+
+    .btn-secondary:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-accent {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
+      color: white;
+    }
+
+    .btn-accent:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    /* Hero Section */
+    #hero {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 50%, var(--accent) 100%);
+      color: white;
+      text-align: center;
+      padding: 150px 1rem 100px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+      opacity: 0.3;
+      animation: float 20s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(180deg); }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .hero-title {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .hero-subtitle {
+      font-size: 1.25rem;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+      font-weight: 400;
+    }
+
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      margin: 3rem 0;
+      flex-wrap: wrap;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      display: block;
+      color: var(--accent);
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    /* Main Content */
+    main {
+      padding-top: 70px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    .section {
+      padding: 4rem 0;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--primary);
+    }
+
+    .section-subtitle {
+      text-align: center;
+      font-size: 1.1rem;
+      color: var(--gray-600);
+      margin-bottom: 3rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Filters */
+    .filters {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .filter-group {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 0.5rem 1rem;
+      border: 2px solid var(--gray-300);
+      background: var(--white);
+      color: var(--gray-700);
+      border-radius: 50px;
+      cursor: pointer;
+      transition: var(--transition);
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    .filter-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      transform: scale(1.05);
+    }
+
+    .filter-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .search-wrapper {
+      position: relative;
+      flex: 1;
+      max-width: 400px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 0.75rem 1rem 0.75rem 3rem;
+      border: 2px solid var(--gray-300);
+      border-radius: 50px;
+      font-size: 1rem;
+      transition: var(--transition);
+      background: var(--white);
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.1);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gray-400);
+      font-size: 1.2rem;
+    }
+
+    /* Event Cards */
+    .events-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .event-card {
+      background: var(--white);
+      border-radius: 1rem;
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      transition: var(--transition);
+      position: relative;
+      border: 1px solid var(--gray-200);
+    }
+
+    .event-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-xl);
+    }
+
+    .event-image {
+      width: 100%;
+      height: 200px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .event-image::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.1) 0%, transparent 70%);
+    }
+
+    .event-badge {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: var(--success);
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .event-content {
+      padding: 1.5rem;
+    }
+
+    .event-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .event-organizer {
+      color: var(--gray-600);
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .event-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--gray-700);
+      font-size: 0.9rem;
+    }
+
+    .meta-icon {
+      width: 16px;
+      height: 16px;
+      color: var(--accent);
+    }
+
+    .event-actions {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .btn-join {
+      flex: 1;
+      background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+      color: white;
+      border: none;
+      padding: 0.75rem 1rem;
+      border-radius: var(--border-radius);
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-join:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .btn-share {
+      padding: 0.75rem;
+      background: var(--gray-100);
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: var(--transition);
+      color: var(--gray-700);
+    }
+
+    .btn-share:hover {
+      background: var(--gray-200);
+    }
+
+    /* Loading */
+    .loading {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--gray-600);
+    }
+
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid var(--gray-200);
+      border-top: 4px solid var(--accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--gray-600);
+    }
+
+    .empty-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      z-index: 2000;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal.show {
+      opacity: 1;
+    }
+
+    .modal-content {
+      background: var(--white);
+      margin: 5% auto;
+      padding: 2rem;
+      border-radius: 1rem;
+      width: 90%;
+      max-width: 500px;
+      position: relative;
+      transform: translateY(-50px);
+      transition: transform 0.3s ease;
+      box-shadow: var(--shadow-xl);
+    }
+
+    .modal.show .modal-content {
+      transform: translateY(0);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .modal-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--gray-400);
+      padding: 0.5rem;
+      border-radius: 50%;
+      transition: var(--transition);
+    }
+
+    .close-btn:hover {
+      background: var(--gray-100);
+      color: var(--gray-700);
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--gray-700);
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 2px solid var(--gray-300);
+      border-radius: var(--border-radius);
+      font-size: 1rem;
+      transition: var(--transition);
+      background: var(--white);
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.1);
+    }
+
+    .form-textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+      margin-top: 2rem;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--gray-900);
+      color: white;
+      padding: 3rem 0 2rem;
+      margin-top: 4rem;
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .footer-section h3 {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      color: var(--accent);
+    }
+
+    .footer-section p {
+      color: var(--gray-400);
+      line-height: 1.6;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .social-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: var(--gray-800);
+      border-radius: 50%;
+      color: white;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .social-link:hover {
+      background: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 2rem;
+      border-top: 1px solid var(--gray-800);
+      color: var(--gray-400);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .header-content {
+        height: 60px;
+        padding: 0 1rem;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .hero-title {
+        font-size: 2.5rem;
+      }
+
+      .hero-stats {
+        gap: 1.5rem;
+      }
+
+      .filters {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .filter-group {
+        justify-content: center;
+      }
+
+      .search-wrapper {
+        max-width: 100%;
+      }
+
+      .events-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .modal-content {
+        margin: 10% auto;
+        width: 95%;
+      }
+
+      .form-actions {
+        flex-direction: column;
+      }
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-in {
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    /* Sport Icons */
+    .sport-icon {
+      display: inline-block;
+      font-size: 1.5rem;
+    }
+
+    .sport-cricket::before { content: "🏏"; }
+    .sport-kabaddi::before { content: "🤼"; }
+    .sport-chess::before { content: "♟️"; }
+    .sport-volleyball::before { content: "🏐"; }
+    .sport-default::before { content: "⚽"; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-content">
+      <a href="#" class="logo">Vibekhel</a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#events">Events</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#community">Community</a></li>
+        </ul>
+        <button class="btn btn-secondary" onclick="showEventForm()">
+          <span>+</span> Add Event
+        </button>
+        <button class="btn btn-primary" onclick="toggleLogin()">
+          Sign In
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section id="hero">
+      <div class="hero-content">
+        <h1 class="hero-title">Connect. Play. Thrive.</h1>
+        <p class="hero-subtitle">Join India's largest street sports community and find your next game!</p>
+        
+        <div class="hero-stats">
+          <div class="stat-item">
+            <span class="stat-number">10K+</span>
+            <span class="stat-label">Active Players</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">500+</span>
+            <span class="stat-label">Events Monthly</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">50+</span>
+            <span class="stat-label">Cities</span>
+          </div>
+        </div>
+        
+        <button class="btn btn-accent" onclick="scrollToEvents()">
+          Explore Events
+        </button>
+      </div>
+    </section>
+
+    <section id="events" class="section">
+      <div class="container">
+        <h2 class="section-title">Upcoming Events</h2>
+        <p class="section-subtitle">Discover and join exciting street sports events in your city</p>
+        
+        <div class="filters">
+          <div class="filter-group">
+            <button class="filter-btn active" onclick="filterEvents('all')">All Sports</button>
+            <button class="filter-btn" onclick="filterEvents('Cricket')">Cricket</button>
+            <button class="filter-btn" onclick="filterEvents('Kabaddi')">Kabaddi</button>
+            <button class="filter-btn" onclick="filterEvents('Chess')">Chess</button>
+            <button class="filter-btn" onclick="filterEvents('Volleyball')">Volleyball</button>
+          </div>
+          <div class="search-wrapper">
+            <span class="search-icon">🔍</span>
+            <input type="text" class="search-input" placeholder="Search by location or sport..." onkeyup="filterEvents('search', this.value)">
+          </div>
+        </div>
+        
+        <div id="loading" class="loading" style="display: none;">
+          <div class="loading-spinner"></div>
+          <p>Loading events...</p>
+        </div>
+        
+        <div id="eventList" class="events-grid"></div>
+        
+        <div id="emptyState" class="empty-state" style="display: none;">
+          <div class="empty-icon">🏃‍♂️</div>
+          <h3>No events found</h3>
+          <p>Try adjusting your search or check back later for new events.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>Vibekhel</h3>
+          <p>India's premier street sports community connecting players across the nation. Join the movement and find your next game!</p>
+          <div class="social-links">
+            <a href="https://youtube.com/@vibe-khel?si=BclsdaDT-Lvhptej" target="_blank" class="social-link">🎥</a>
+            <a href="https://www.instagram.com/vibekhel?utm_source=qr&igsh=MjliaTlqMTVtMzc=" target="_blank" class="social-link">📸</a>
+            <a href="https://www.linkedin.com" target="_blank" class="social-link">💼</a>
+            <a href="https://x.com/Vibekhel?t=P7eO2PizXhDNeL9t1c3IYg&s=09" target="_blank" class="social-link">🐦</a>
+          </div>
+        </div>
+        <div class="footer-section">
+          <h3>Quick Links</h3>
+          <p>Find Events<br>Create Event<br>Join Community<br>About Us</p>
+        </div>
+        <div class="footer-section">
+          <h3>Contact</h3>
+          <p>Email: hello@vibekhel.com<br>Phone: +91 12345 67890<br>Address: Mumbai, India</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Vibekhel. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Add Event Modal -->
+  <div id="eventForm" class="modal" role="dialog" aria-hidden="true">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Add New Event</h3>
+        <button class="close-btn" onclick="hideEventForm()" aria-label="Close">×</button>
+      </div>
+      <form id="eventFormData">
+        <div class="form-group">
+          <label class="form-label" for="sport">Sport *</label>
+          <input type="text" id="sport" name="sport" class="form-input" placeholder="e.g., Cricket" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="location">Location *</label>
+          <input type="text" id="location" name="location" class="form-input" placeholder="e.g., Mumbai" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="date">Date *</label>
+          <input type="date" id="date" name="date" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="time">Time *</label>
+          <input type="time" id="time" name="time" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="organizer">Organizer</label>
+          <input type="text" id="organizer" name="organizer" class="form-input" placeholder="e.g., Local Club">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="participants">Max Participants</label>
+          <input type="number" id="participants" name="participants" class="form-input" placeholder="e.g., 24" min="1">
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" onclick="hideEventForm()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Create Event</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Login Modal -->
+  <div id="loginModal" class="modal" role="dialog" aria-hidden="true">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Sign In</h3>
+        <button class="close-btn" onclick="toggleLogin()" aria-label="Close">
