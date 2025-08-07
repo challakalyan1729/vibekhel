@@ -39,7 +39,7 @@
             font-weight: 600;
             text-decoration: none;
             border-radius: 8px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
             border: none;
             cursor: pointer;
         }
@@ -47,11 +47,6 @@
             background: var(--emerald-green);
             color: var(--light-text);
             box-shadow: 0 4px 15px rgba(40, 167, 69, 0.2);
-        }
-        .btn-secondary {
-            background: transparent;
-            color: var(--light-text);
-            border: 1px solid var(--border-color);
         }
         .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 7px 20px rgba(40, 167, 69, 0.3); }
         .btn:hover { transform: translateY(-3px); }
@@ -80,11 +75,14 @@
             border-bottom: 1px solid var(--border-color);
         }
         .desktop-nav .container { display: flex; justify-content: space-between; align-items: center; }
-        .desktop-nav .logo img { height: 50px; width: auto; cursor: pointer; }
+        .desktop-nav .logo img { 
+            height: 50px; 
+            width: auto; 
+            cursor: pointer;
+        }
         .nav-links { display: flex; align-items: center; gap: 25px; }
         .nav-links a { color: var(--light-text); text-decoration: none; font-weight: 500; transition: color 0.3s ease; cursor: pointer; }
         .nav-links a:hover { color: var(--gold); }
-        .nav-auth { display: flex; gap: 15px; }
 
         /* --- Hero Section --- */
         #hero {
@@ -130,6 +128,7 @@
         .form-group textarea { resize: vertical; min-height: 120px; }
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--emerald-green); }
         
+        /* Profile Page Specifics */
         .profile-header { text-align: center; margin-bottom: 40px; }
         .profile-avatar { width: 120px; height: 120px; border-radius: 50%; border: 4px solid var(--emerald-green); margin-bottom: 15px; }
         .profile-header h3 { font-size: 1.8rem; }
@@ -160,15 +159,31 @@
             z-index: 1000;
         }
         .mobile-nav ul { list-style: none; display: flex; justify-content: space-around; }
-        .mobile-nav a { display: flex; flex-direction: column; align-items: center; padding: 10px; color: #888; text-decoration: none; transition: color 0.3s ease; }
+        .mobile-nav a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            color: #888;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
         .mobile-nav a.active { color: var(--emerald-green); }
         .mobile-nav svg { width: 24px; height: 24px; margin-bottom: 4px; }
         .mobile-nav span { font-size: 0.75rem; }
 
         /* --- Footer --- */
         .site-footer { background-color: #000; padding: 60px 0 0 0; border-top: 1px solid var(--border-color); }
-        .footer-content { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
-        .footer-about .logo img { height: 50px; margin-bottom: 15px; }
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        .footer-about .logo img { 
+            height: 50px; 
+            margin-bottom: 15px; 
+        }
         .footer-about p { color: #aaa; font-size: 0.9rem; }
         .footer-links ul { list-style: none; }
         .footer-links ul li a { color: #aaa; text-decoration: none; transition: color 0.3s ease; font-size: 0.9rem; }
@@ -177,11 +192,17 @@
         .footer-social .social-links a { color: var(--light-text); transition: transform 0.3s ease, color 0.3s ease; }
         .footer-social .social-links a:hover { color: var(--gold); transform: translateY(-3px); }
         .footer-social .social-links svg { width: 24px; height: 24px; }
-        .footer-bottom { background-color: #000; text-align: center; padding: 20px 0; border-top: 1px solid var(--border-color); color: #777; font-size: 0.9rem; }
+        .footer-bottom {
+            background-color: #000;
+            text-align: center;
+            padding: 20px 0;
+            border-top: 1px solid var(--border-color);
+            color: #777;
+            font-size: 0.9rem;
+        }
         
         @media (max-width: 992px) {
             .footer-content { grid-template-columns: 1fr 1fr; }
-            .nav-auth, .desktop-nav .nav-links a[data-page="profile-page"] { display: none; }
         }
         @media (max-width: 768px) {
             .desktop-nav { display: none; }
@@ -191,7 +212,7 @@
             .footer-content { grid-template-columns: 1fr; text-align: center; }
             .footer-about .logo img { margin: 0 auto 15px auto; }
             .footer-social .social-links { justify-content: center; }
-            .site-footer { padding-bottom: 80px; }
+            .site-footer { padding-bottom: 80px; } /* Space for mobile nav */
         }
     </style>
 </head>
@@ -202,13 +223,9 @@
             <a class="logo" data-page="home"><img src="https://i.postimg.cc/rwFfPmXf/Picsart-25-07-17-13-57-44-788.jpg" alt="Vibekhel Logo"></a>
             <nav class="nav-links">
                 <a data-page="events-page">Find Games</a>
+                <a data-page="create-event-page" class="btn btn-primary">Organize a Game</a>
                 <a data-page="profile-page">My Profile</a>
-                <a data-page="create-event-page">Organize</a>
             </nav>
-            <div class="nav-auth">
-                <a href="#" class="btn btn-secondary">Login</a>
-                <a href="#" class="btn btn-primary">Sign Up</a>
-            </div>
         </div>
     </header>
 
@@ -325,7 +342,6 @@
             <li><a href="#" data-page="events-page"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg><span>Events</span></a></li>
             <li><a href="#" data-page="create-event-page"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg><span>Create</span></a></li>
             <li><a href="#" data-page="profile-page"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg><span>Profile</span></a></li>
-            <li><a href="#"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg><span>Login</span></a></li>
         </ul>
     </nav>
 
@@ -526,7 +542,7 @@
 
         // --- INITIAL LOAD ---
         displayAllEvents();
-        gsap.from('.desktop-nav .logo, .nav-links a, .nav-auth a', { duration: 0.8, opacity: 0, y: -50, stagger: 0.1, ease: 'power3.out' });
+        gsap.from('.desktop-nav .logo, .nav-links a', { duration: 0.8, opacity: 0, y: -50, stagger: 0.1, ease: 'power3.out' });
         gsap.from('#hero h1, #hero p, .search-form', { duration: 1, opacity: 0, y: 50, stagger: 0.2, ease: 'power3.out', delay: 0.5 });
     });
     </script>
