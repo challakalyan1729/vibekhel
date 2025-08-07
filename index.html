@@ -75,7 +75,11 @@
             border-bottom: 1px solid var(--border-color);
         }
         .desktop-nav .container { display: flex; justify-content: space-between; align-items: center; }
-        .desktop-nav .logo img { height: 50px; width: auto; cursor: pointer; }
+        .desktop-nav .logo img { 
+            height: 50px; 
+            width: auto; 
+            cursor: pointer;
+        }
         .nav-links { display: flex; align-items: center; gap: 25px; }
         .nav-links a { color: var(--light-text); text-decoration: none; font-weight: 500; transition: color 0.3s ease; cursor: pointer; }
         .nav-links a:hover { color: var(--gold); }
@@ -176,7 +180,10 @@
             gap: 40px;
             margin-bottom: 40px;
         }
-        .footer-about .logo img { height: 50px; margin-bottom: 15px; }
+        .footer-about .logo img { 
+            height: 50px; 
+            margin-bottom: 15px; 
+        }
         .footer-about p { color: #aaa; font-size: 0.9rem; }
         .footer-links ul { list-style: none; }
         .footer-links ul li a { color: #aaa; text-decoration: none; transition: color 0.3s ease; font-size: 0.9rem; }
@@ -213,7 +220,7 @@
 
     <header class="desktop-nav">
         <div class="container">
-            <a class="logo" data-page="home"><img src="http://googleusercontent.com/file_content/1" alt="Vibekhel Logo"></a>
+            <a class="logo" data-page="home"><img src="https://i.postimg.cc/rwFfPmXf/Picsart-25-07-17-13-57-44-788.jpg" alt="Vibekhel Logo"></a>
             <nav class="nav-links">
                 <a data-page="events-page">Find Games</a>
                 <a data-page="create-event-page" class="btn btn-primary">Organize a Game</a>
@@ -293,7 +300,7 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-about">
-                    <a class="logo" data-page="home"><img src="http://googleusercontent.com/file_content/1" alt="Vibekhel Logo"></a>
+                    <a class="logo" data-page="home"><img src="https://i.postimg.cc/rwFfPmXf/Picsart-25-07-17-13-57-44-788.jpg" alt="Vibekhel Logo"></a>
                     <p>India's #1 digital platform for connecting gully sports players. Find games, organize meetups, and build communities.</p>
                 </div>
                 <div class="footer-links">
@@ -371,7 +378,7 @@
         // --- UI ELEMENTS ---
         const mainContent = document.querySelector('main');
         const pages = document.querySelectorAll('.page');
-        const allNavLinks = document.querySelectorAll('.desktop-nav a, .mobile-nav a');
+        const allNavLinks = document.querySelectorAll('.desktop-nav a, .mobile-nav a, .footer-links a');
         const eventsGrid = document.getElementById('events-grid');
         const myEventsGrid = document.getElementById('my-events-grid');
         const filterBar = document.getElementById('filter-bar');
