@@ -26,9 +26,10 @@
             overflow-x: hidden;
         }
         .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-        h1, h2, h3 { font-weight: 700; line-height: 1.2; }
+        h1, h2, h3, h4 { font-weight: 700; line-height: 1.2; }
         h1 { font-size: clamp(2.5rem, 5vw, 3.5rem); }
         h2 { font-size: clamp(1.8rem, 4vw, 2.2rem); color: var(--light-text); text-align: center; margin-bottom: 1rem;}
+        h4 { font-size: 1.1rem; color: var(--light-text); margin-bottom: 1rem; }
         p.section-subtitle { text-align: center; color: #b3b3b3; max-width: 600px; margin: 0 auto 40px auto; }
         .btn {
             display: inline-block;
@@ -60,7 +61,7 @@
             min-height: 100vh;
         }
         .page.active { display: block; }
-        main { position: relative; }
+        main { position: relative; min-height: 100vh; }
 
         /* --- Header & Navigation --- */
         .desktop-nav {
@@ -168,18 +169,43 @@
         .mobile-nav span { font-size: 0.75rem; }
 
         /* --- Footer --- */
-        footer { background-color: #000; text-align: center; padding: 40px 0 100px 0; border-top: 1px solid var(--border-color); }
-        .social-links { display: flex; justify-content: center; gap: 25px; margin-bottom: 20px; }
-        .social-links a { color: var(--light-text); transition: transform 0.3s ease, color 0.3s ease; }
-        .social-links a:hover { color: var(--gold); transform: translateY(-3px); }
-        .social-links svg { width: 24px; height: 24px; }
-        footer p { color: #777; margin: 0; }
+        .site-footer { background-color: #000; padding: 60px 0 0 0; border-top: 1px solid var(--border-color); }
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        .footer-about .logo img { height: 50px; margin-bottom: 15px; }
+        .footer-about p { color: #aaa; font-size: 0.9rem; }
+        .footer-links ul { list-style: none; }
+        .footer-links ul li a { color: #aaa; text-decoration: none; transition: color 0.3s ease; font-size: 0.9rem; }
+        .footer-links ul li a:hover { color: var(--gold); }
+        .footer-social .social-links { display: flex; gap: 15px; }
+        .footer-social .social-links a { color: var(--light-text); transition: transform 0.3s ease, color 0.3s ease; }
+        .footer-social .social-links a:hover { color: var(--gold); transform: translateY(-3px); }
+        .footer-social .social-links svg { width: 24px; height: 24px; }
+        .footer-bottom {
+            background-color: #000;
+            text-align: center;
+            padding: 20px 0;
+            border-top: 1px solid var(--border-color);
+            color: #777;
+            font-size: 0.9rem;
+        }
         
+        @media (max-width: 992px) {
+            .footer-content { grid-template-columns: 1fr 1fr; }
+        }
         @media (max-width: 768px) {
             .desktop-nav { display: none; }
             .mobile-nav { display: block; }
             .search-form { flex-direction: column; }
             .page-content { padding: 80px 0; }
+            .footer-content { grid-template-columns: 1fr; text-align: center; }
+            .footer-about .logo img { margin: 0 auto 15px auto; }
+            .footer-social .social-links { justify-content: center; }
+            .site-footer { padding-bottom: 80px; } /* Space for mobile nav */
         }
     </style>
 </head>
@@ -263,13 +289,42 @@
         </div>
     </main>
 
-    <footer>
+    <footer class="site-footer">
         <div class="container">
-            <div class="social-links">
-                <a href="https://www.instagram.com/vibekhel/" target="_blank" aria-label="Instagram"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
-                <a href="http://www.youtube.com/@Vibekhelcom" target="_blank" aria-label="YouTube"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2A29 29 0 0 0 23 11.75a29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg></a>
-                <a href="https://twitter.com/vibekhel_com" target="_blank" aria-label="X (formerly Twitter)"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+            <div class="footer-content">
+                <div class="footer-about">
+                    <a class="logo" data-page="home"><img src="http://googleusercontent.com/file_content/1" alt="Vibekhel Logo"></a>
+                    <p>India's #1 digital platform for connecting gully sports players. Find games, organize meetups, and build communities.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#" data-page="home">Home</a></li>
+                        <li><a href="#" data-page="events-page">Find Games</a></li>
+                        <li><a href="#" data-page="create-event-page">Organize</a></li>
+                        <li><a href="#" data-page="profile-page">My Profile</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-social">
+                    <h4>Follow Us</h4>
+                    <div class="social-links">
+                        <a href="https://www.instagram.com/vibekhel/" target="_blank" aria-label="Instagram"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                        <a href="http://www.youtube.com/@Vibekhelcom" target="_blank" aria-label="YouTube"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2A29 29 0 0 0 23 11.75a29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg></a>
+                        <a href="https://twitter.com/vibekhel_com" target="_blank" aria-label="X (formerly Twitter)"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+                    </div>
+                </div>
             </div>
+        </div>
+        <div class="footer-bottom">
             <p>&copy; 2025 Vibekhel. All Rights Reserved.</p>
         </div>
     </footer>
@@ -316,7 +371,7 @@
         // --- UI ELEMENTS ---
         const mainContent = document.querySelector('main');
         const pages = document.querySelectorAll('.page');
-        const allNavLinks = document.querySelectorAll('.nav-links a, .logo, .mobile-nav a');
+        const allNavLinks = document.querySelectorAll('.desktop-nav a, .mobile-nav a');
         const eventsGrid = document.getElementById('events-grid');
         const myEventsGrid = document.getElementById('my-events-grid');
         const filterBar = document.getElementById('filter-bar');
@@ -327,7 +382,6 @@
             const currentPage = document.querySelector('.page.active');
             const nextPage = document.getElementById(pageId);
             
-            // Update active state for nav links
             allNavLinks.forEach(link => {
                 link.classList.remove('active');
                 if (link.dataset.page === pageId) {
@@ -342,7 +396,6 @@
                 nextPage.classList.add('active');
                 gsap.fromTo(nextPage, { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 0.3, ease: 'power2.out' });
                 window.scrollTo(0, 0);
-                // Refresh event displays if navigating to a page with events
                 if(pageId === 'events-page') displayAllEvents();
                 if(pageId === 'profile-page') displayMyEvents();
             }});
