@@ -11,7 +11,7 @@
         :root {
             --emerald-green: #28a745;
             --gold: #ffc107;
-            --dark-bg: #121212;
+            --dark-bg: #0a0a0a;
             --light-text: #f0f0f0;
             --dark-text: #212529;
             --card-bg: #1c1c1c;
@@ -23,12 +23,13 @@
             background-color: var(--dark-bg);
             color: var(--light-text);
             line-height: 1.7;
+            overflow-x: hidden;
         }
         .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
         h1, h2, h3 { font-weight: 700; line-height: 1.2; }
         h1 { font-size: clamp(2.5rem, 5vw, 3.5rem); }
-        h2 { font-size: clamp(2rem, 4vw, 2.5rem); color: var(--light-text); text-align: center; margin-bottom: 1rem;}
-        p.section-subtitle { text-align: center; color: #b3b3b3; max-width: 600px; margin: 0 auto 50px auto; }
+        h2 { font-size: clamp(1.8rem, 4vw, 2.2rem); color: var(--light-text); text-align: center; margin-bottom: 1rem;}
+        p.section-subtitle { text-align: center; color: #b3b3b3; max-width: 600px; margin: 0 auto 40px auto; }
         .btn {
             display: inline-block;
             padding: 12px 28px;
@@ -50,11 +51,19 @@
         .btn:hover { transform: translateY(-3px); }
         
         /* --- App Structure --- */
-        .page { display: none; }
+        .page {
+            display: none;
+            position: absolute;
+            width: 100%;
+            top: 0;
+            left: 0;
+            min-height: 100vh;
+        }
         .page.active { display: block; }
+        main { position: relative; }
 
         /* --- Header & Navigation --- */
-        .navbar {
+        .desktop-nav {
             background: rgba(18, 18, 18, 0.8);
             backdrop-filter: blur(10px);
             padding: 0.75rem 0;
@@ -64,8 +73,8 @@
             z-index: 1000;
             border-bottom: 1px solid var(--border-color);
         }
-        .navbar .container { display: flex; justify-content: space-between; align-items: center; }
-        .navbar .logo img { height: 50px; width: auto; cursor: pointer; }
+        .desktop-nav .container { display: flex; justify-content: space-between; align-items: center; }
+        .desktop-nav .logo img { height: 50px; width: auto; cursor: pointer; }
         .nav-links { display: flex; align-items: center; gap: 25px; }
         .nav-links a { color: var(--light-text); text-decoration: none; font-weight: 500; transition: color 0.3s ease; cursor: pointer; }
         .nav-links a:hover { color: var(--gold); }
@@ -86,12 +95,12 @@
         .search-form .btn { flex-shrink: 0; }
 
         /* --- Event Listing Section --- */
-        #events-page { padding: 120px 0 80px 0; }
+        .page-content { padding: 100px 0 100px 0; }
         .filter-bar { display: flex; gap: 15px; justify-content: center; margin-bottom: 40px; flex-wrap: wrap; }
         .filter-btn { background: var(--card-bg); color: var(--light-text); border: 1px solid var(--border-color); padding: 10px 20px; border-radius: 50px; cursor: pointer; transition: all 0.3s ease; }
         .filter-btn:hover, .filter-btn.active { background: var(--emerald-green); border-color: var(--emerald-green); color: #fff; }
         .events-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
-        .event-card { background: var(--card-bg); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.3s ease, box-shadow 0.3s ease; border: 1px solid var(--border-color); opacity: 0; }
+        .event-card { background: var(--card-bg); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.3s ease, box-shadow 0.3s ease; border: 1px solid var(--border-color); }
         .event-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.3); }
         .event-card-banner { height: 180px; background-size: cover; background-position: center; display: flex; align-items: flex-start; padding: 15px; }
         .event-card-tag { background: rgba(0,0,0,0.6); color: var(--gold); padding: 5px 12px; border-radius: 50px; font-size: 0.8rem; font-weight: 600; }
@@ -106,28 +115,23 @@
         .avatar { width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--dark-bg); margin-left: -10px; }
         .avatar:first-child { margin-left: 0; }
 
-        /* --- Create Event Page --- */
-        #create-event-page { padding: 120px 0 80px 0; }
-        .create-form { max-width: 800px; margin: 0 auto; background: var(--card-bg); padding: 40px; border-radius: 12px; border: 1px solid var(--border-color); }
+        /* --- Create Event & Profile Pages --- */
+        .form-container { max-width: 800px; margin: 0 auto; background: var(--card-bg); padding: 40px; border-radius: 12px; border: 1px solid var(--border-color); }
         .form-group { margin-bottom: 20px; }
         .form-group label { display: block; margin-bottom: 8px; font-weight: 500; }
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            background: var(--dark-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            color: var(--light-text);
-            font-size: 1rem;
-        }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; background: var(--dark-bg); border: 1px solid var(--border-color); border-radius: 8px; color: var(--light-text); font-size: 1rem; }
         .form-group textarea { resize: vertical; min-height: 120px; }
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--emerald-green); }
+        
+        /* Profile Page Specifics */
+        .profile-header { text-align: center; margin-bottom: 40px; }
+        .profile-avatar { width: 120px; height: 120px; border-radius: 50%; border: 4px solid var(--emerald-green); margin-bottom: 15px; }
+        .profile-header h3 { font-size: 1.8rem; }
+        .profile-header p { color: #b3b3b3; }
 
         /* --- Event Detail Modal --- */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 2000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s ease; }
-        .modal-overlay.active { display: flex; opacity: 1; }
-        .modal-container { background: var(--card-bg); width: 90%; max-width: 800px; max-height: 90vh; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; transform: scale(0.95); transition: transform 0.3s ease; }
-        .modal-overlay.active .modal-container { transform: scale(1); }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 2000; display: none; justify-content: center; align-items: center; }
+        .modal-container { background: var(--card-bg); width: 90%; max-width: 800px; max-height: 90vh; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; }
         .modal-header { padding: 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
         .modal-header h2 { margin: 0; font-size: 1.8rem; }
         .modal-close { background: none; border: none; color: var(--light-text); font-size: 2rem; cursor: pointer; }
@@ -138,45 +142,56 @@
         .modal-info svg { width: 24px; height: 24px; stroke: var(--emerald-green); flex-shrink: 0; margin-top: 3px; }
         .modal-footer { padding: 20px; border-top: 1px solid var(--border-color); margin-top: auto; }
 
-        /* --- Footer --- */
-        footer { background-color: #000; text-align: center; padding: 40px 0; border-top: 1px solid var(--border-color); }
-        .social-links {
+        /* --- Mobile Navigation --- */
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+            z-index: 1000;
+        }
+        .mobile-nav ul { list-style: none; display: flex; justify-content: space-around; }
+        .mobile-nav a {
             display: flex;
-            justify-content: center;
-            gap: 25px;
-            margin-bottom: 20px;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            color: #888;
+            text-decoration: none;
+            transition: color 0.3s ease;
         }
-        .social-links a {
-            color: var(--light-text);
-            transition: transform 0.3s ease, color 0.3s ease;
-        }
-        .social-links a:hover {
-            color: var(--gold);
-            transform: translateY(-3px);
-        }
-        .social-links svg {
-            width: 24px;
-            height: 24px;
-        }
-        footer p {
-            color: #777;
-            margin: 0;
-        }
+        .mobile-nav a.active { color: var(--emerald-green); }
+        .mobile-nav svg { width: 24px; height: 24px; margin-bottom: 4px; }
+        .mobile-nav span { font-size: 0.75rem; }
+
+        /* --- Footer --- */
+        footer { background-color: #000; text-align: center; padding: 40px 0 100px 0; border-top: 1px solid var(--border-color); }
+        .social-links { display: flex; justify-content: center; gap: 25px; margin-bottom: 20px; }
+        .social-links a { color: var(--light-text); transition: transform 0.3s ease, color 0.3s ease; }
+        .social-links a:hover { color: var(--gold); transform: translateY(-3px); }
+        .social-links svg { width: 24px; height: 24px; }
+        footer p { color: #777; margin: 0; }
         
         @media (max-width: 768px) {
-            .nav-links { display: none; }
+            .desktop-nav { display: none; }
+            .mobile-nav { display: block; }
             .search-form { flex-direction: column; }
+            .page-content { padding: 80px 0; }
         }
     </style>
 </head>
 <body>
 
-    <header class="navbar">
+    <header class="desktop-nav">
         <div class="container">
             <a class="logo" data-page="home"><img src="http://googleusercontent.com/file_content/1" alt="Vibekhel Logo"></a>
             <nav class="nav-links">
                 <a data-page="events-page">Find Games</a>
                 <a data-page="create-event-page" class="btn btn-primary">Organize a Game</a>
+                <a data-page="profile-page">My Profile</a>
             </nav>
         </div>
     </header>
@@ -185,8 +200,8 @@
         <div id="home" class="page active">
             <section id="hero">
                 <div class="container">
-                    <h1 class="hero-title">Find your <span>vibe</span>. Find your <span>game</span>.</h1>
-                    <p class="hero-subtitle">From gully cricket to neighbourhood football, join thousands of players and get back to the games you love.</p>
+                    <h1>Find your <span>vibe</span>. Find your <span>game</span>.</h1>
+                    <p>From gully cricket to neighbourhood football, join thousands of players and get back to the games you love.</p>
                     <form class="search-form">
                         <input type="text" placeholder="Search for Cricket, Football, etc...">
                         <input type="text" placeholder="Hyderabad, Telangana">
@@ -197,7 +212,7 @@
         </div>
 
         <div id="events-page" class="page">
-            <section id="events">
+            <div class="page-content">
                 <div class="container">
                     <h2>Games Happening Near You</h2>
                     <p class="section-subtitle">Discover games scheduled for today, this week, or this month. Your next match is just a click away.</p>
@@ -210,98 +225,85 @@
                     </div>
                     <div class="events-grid" id="events-grid"></div>
                 </div>
-            </section>
+            </div>
         </div>
 
         <div id="create-event-page" class="page">
-             <section id="create-event">
+             <div class="page-content">
                 <div class="container">
                     <h2>Organize Your Own Game</h2>
                     <p class="section-subtitle">Fill in the details below to create your event and get players to join you on the field.</p>
-                    <form class="create-form" id="create-event-form">
-                        <div class="form-group">
-                            <label for="event-title">Event Title</label>
-                            <input type="text" id="event-title" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="event-sport">Sport</label>
-                            <select id="event-sport" required>
-                                <option value="Cricket">Cricket</option>
-                                <option value="Football">Football</option>
-                                <option value="Badminton">Badminton</option>
-                                <option value="Volleyball">Volleyball</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="event-location">Location / Venue</label>
-                            <input type="text" id="event-location" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="event-date">Date</label>
-                            <input type="date" id="event-date" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="event-description">Description</label>
-                            <textarea id="event-description" placeholder="Mention rules, skill level, what to bring, etc."></textarea>
-                        </div>
+                    <form class="form-container" id="create-event-form">
+                        <div class="form-group"><label for="event-title">Event Title</label><input type="text" id="event-title" required></div>
+                        <div class="form-group"><label for="event-sport">Sport</label><select id="event-sport" required><option value="Cricket">Cricket</option><option value="Football">Football</option><option value="Badminton">Badminton</option><option value="Volleyball">Volleyball</option><option value="Other">Other</option></select></div>
+                        <div class="form-group"><label for="event-location">Location / Venue</label><input type="text" id="event-location" required></div>
+                        <div class="form-group"><label for="event-date">Date</label><input type="date" id="event-date" required></div>
+                        <div class="form-group"><label for="event-description">Description</label><textarea id="event-description" placeholder="Mention rules, skill level, what to bring, etc."></textarea></div>
                         <button type="submit" class="btn btn-primary" style="width: 100%; padding: 15px;">Create Event</button>
                     </form>
                 </div>
-            </section>
+            </div>
+        </div>
+        
+        <div id="profile-page" class="page">
+            <div class="page-content">
+                <div class="container">
+                    <div class="profile-header">
+                        <img src="https://i.pravatar.cc/150?img=10" alt="User Avatar" class="profile-avatar">
+                        <h3>Rohan Sharma</h3>
+                        <p>Hyderabad, Telangana</p>
+                    </div>
+                    <h2>My Events</h2>
+                    <p class="section-subtitle">Games you have RSVP'd to. Get ready to play!</p>
+                    <div class="events-grid" id="my-events-grid">
+                        <p style="text-align:center; grid-column: 1 / -1; color: #ccc;">You haven't joined any games yet. <a href="#" data-page="events-page" style="color: var(--emerald-green);">Find one now!</a></p>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 
     <footer>
         <div class="container">
             <div class="social-links">
-                <a href="https://www.instagram.com/vibekhel/" target="_blank" aria-label="Instagram">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-                </a>
-                <a href="http://www.youtube.com/@Vibekhelcom" target="_blank" aria-label="YouTube">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2A29 29 0 0 0 23 11.75a29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>
-                </a>
-                <a href="https://twitter.com/vibekhel_com" target="_blank" aria-label="X (formerly Twitter)">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                </a>
+                <a href="https://www.instagram.com/vibekhel/" target="_blank" aria-label="Instagram"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="http://www.youtube.com/@Vibekhelcom" target="_blank" aria-label="YouTube"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2A29 29 0 0 0 23 11.75a29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg></a>
+                <a href="https://twitter.com/vibekhel_com" target="_blank" aria-label="X (formerly Twitter)"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
             </div>
             <p>&copy; 2025 Vibekhel. All Rights Reserved.</p>
         </div>
     </footer>
 
-    <!-- Event Detail Modal -->
+    <nav class="mobile-nav">
+        <ul>
+            <li><a href="#" data-page="home" class="active"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg><span>Home</span></a></li>
+            <li><a href="#" data-page="events-page"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg><span>Events</span></a></li>
+            <li><a href="#" data-page="create-event-page"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg><span>Create</span></a></li>
+            <li><a href="#" data-page="profile-page"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg><span>Profile</span></a></li>
+        </ul>
+    </nav>
+
     <div class="modal-overlay" id="event-detail-modal">
         <div class="modal-container">
-            <div class="modal-header">
-                <h2 id="modal-title">Event Title</h2>
-                <button class="modal-close" id="modal-close-btn">&times;</button>
-            </div>
+            <div class="modal-header"><h2 id="modal-title"></h2><button class="modal-close" id="modal-close-btn">&times;</button></div>
             <div class="modal-body">
                 <div class="modal-banner" id="modal-banner"></div>
                 <p id="modal-description"></p>
                 <ul class="modal-info">
-                    <li>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                        <span id="modal-date"></span>
-                    </li>
-                    <li>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                        <span id="modal-location"></span>
-                    </li>
+                    <li><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg><span id="modal-date"></span></li>
+                    <li><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg><span id="modal-location"></span></li>
                 </ul>
             </div>
-            <div class="modal-footer">
-                <button class="btn btn-primary" style="width: 100%;">RSVP - Join Game</button>
-            </div>
+            <div class="modal-footer"><button id="rsvp-btn" class="btn btn-primary" style="width: 100%;">RSVP - Join Game</button></div>
         </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         
-        const eventsData = [
+        // --- DATA STORE ---
+        let eventsData = [
             { id: 1, title: 'Weekend Cricket Showdown', sport: 'Cricket', location: 'NTR Stadium, Hyderabad', date: '2025-08-09', description: 'Join us for a friendly but competitive game of cricket. All skill levels welcome. Please bring your own gear if possible.', image: 'https://images.unsplash.com/photo-1595780499169-d5eda791cdef?q=80&w=2070&auto=format&fit=crop' },
             { id: 2, title: 'Evening Football Match', sport: 'Football', location: 'Gachibowli Stadium, Hyderabad', date: '2025-08-09', description: 'Fast-paced 7-a-side football. We need a few more players to complete the teams. Bibs will be provided.', image: 'https://images.unsplash.com/photo-1551958214-2d5b23d9efb6?q=80&w=2070&auto=format&fit=crop' },
             { id: 3, title: 'Sunday Morning Badminton', sport: 'Badminton', location: 'PJR Indoor Stadium, Hyderabad', date: '2025-08-10', description: 'Doubles badminton session. We have courts booked for 2 hours. Please bring non-marking shoes.', image: 'https://images.unsplash.com/photo-1521587509720-91157b8127a3?q=80&w=1974&auto=format&fit=crop' },
@@ -309,78 +311,136 @@
             { id: 5, title: 'Box Cricket Tournament', sport: 'Cricket', location: 'Turfside Arena, Madhapur', date: '2025-08-11', description: 'High-energy box cricket under the lights. Form your team of 6 or join as an individual.', image: 'https://images.unsplash.com/photo-1629285483773-635f703a118e?q=80&w=2070&auto=format&fit=crop' },
             { id: 6, title: '5-a-side Football Fun', sport: 'Football', location: 'Hotfut, Begumpet', date: '2025-08-12', description: 'Quick-paced football on a turf pitch. Great for a cardio workout. Limited spots available.', image: 'https://images.unsplash.com/photo-1575361204480-aadea2503aa4?q=80&w=2070&auto=format&fit=crop' }
         ];
+        let myEvents = [];
 
-        // --- Page Navigation ---
+        // --- UI ELEMENTS ---
+        const mainContent = document.querySelector('main');
         const pages = document.querySelectorAll('.page');
-        const navLinks = document.querySelectorAll('.nav-links a, .logo');
-        
-        function navigateTo(pageId) {
-            pages.forEach(page => page.classList.remove('active'));
-            document.getElementById(pageId).classList.add('active');
-            window.scrollTo(0, 0);
-        }
+        const allNavLinks = document.querySelectorAll('.nav-links a, .logo, .mobile-nav a');
+        const eventsGrid = document.getElementById('events-grid');
+        const myEventsGrid = document.getElementById('my-events-grid');
+        const filterBar = document.getElementById('filter-bar');
+        const modal = document.getElementById('event-detail-modal');
 
-        navLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                const pageId = e.currentTarget.getAttribute('data-page');
-                if (pageId) {
-                    e.preventDefault();
-                    navigateTo(pageId);
+        // --- NAVIGATION ---
+        function navigateTo(pageId) {
+            const currentPage = document.querySelector('.page.active');
+            const nextPage = document.getElementById(pageId);
+            
+            // Update active state for nav links
+            allNavLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.dataset.page === pageId) {
+                    link.classList.add('active');
                 }
             });
+
+            if (currentPage.id === pageId) return;
+
+            gsap.to(currentPage, { autoAlpha: 0, y: -20, duration: 0.3, ease: 'power2.in', onComplete: () => {
+                currentPage.classList.remove('active');
+                nextPage.classList.add('active');
+                gsap.fromTo(nextPage, { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 0.3, ease: 'power2.out' });
+                window.scrollTo(0, 0);
+                // Refresh event displays if navigating to a page with events
+                if(pageId === 'events-page') displayAllEvents();
+                if(pageId === 'profile-page') displayMyEvents();
+            }});
+        }
+
+        allNavLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                const pageId = e.currentTarget.dataset.page;
+                if (pageId) { e.preventDefault(); navigateTo(pageId); }
+            });
         });
+        
+        // --- EVENT RENDERING ---
+        function createEventCard(event) {
+            const card = document.createElement('article');
+            card.className = 'event-card';
+            card.dataset.eventId = event.id;
+            card.innerHTML = `
+                <div class="event-card-banner" style="background-image: url('${event.image}')"><span class="event-card-tag">${event.sport}</span></div>
+                <div class="event-card-content">
+                    <h3>${event.title}</h3>
+                    <ul class="event-card-info">
+                        <li><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg><span>${new Date(event.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span></li>
+                        <li><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg><span>${event.location}</span></li>
+                    </ul>
+                    <div class="event-card-footer">
+                        <div class="attendees"><img src="https://i.pravatar.cc/150?img=${event.id}" alt="User" class="avatar"><span>+${Math.floor(Math.random() * 10) + 1} going</span></div>
+                        <button class="btn view-details-btn" style="font-size: 0.9rem; padding: 8px 16px;">View Details</button>
+                    </div>
+                </div>`;
+            return card;
+        }
 
-        // --- Event Display Logic ---
-        const eventsGrid = document.getElementById('events-grid');
-        const filterBar = document.getElementById('filter-bar');
-
-        function displayEvents(filter = 'all') {
+        function displayAllEvents(filter = 'all') {
             eventsGrid.innerHTML = '';
             const filteredEvents = (filter === 'all') ? eventsData : eventsData.filter(event => event.sport === filter);
-            
             if (filteredEvents.length === 0) {
                 eventsGrid.innerHTML = `<p style="text-align:center; grid-column: 1 / -1; color: #ccc;">No games found. Why not organize one?</p>`;
                 return;
             }
+            filteredEvents.forEach(event => eventsGrid.appendChild(createEventCard(event)));
+            gsap.from(".event-card", { duration: 0.5, autoAlpha: 0, y: 30, stagger: 0.1, ease: 'power3.out' });
+        }
 
-            filteredEvents.forEach(event => {
-                const card = document.createElement('article');
-                card.className = 'event-card';
-                card.dataset.eventId = event.id;
-                card.innerHTML = `
-                    <div class="event-card-banner" style="background-image: url('${event.image}')">
-                        <span class="event-card-tag">${event.sport}</span>
-                    </div>
-                    <div class="event-card-content">
-                        <h3>${event.title}</h3>
-                        <ul class="event-card-info">
-                            <li><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg><span>${new Date(event.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span></li>
-                            <li><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg><span>${event.location}</span></li>
-                        </ul>
-                        <div class="event-card-footer">
-                            <div class="attendees">
-                                <img src="https://i.pravatar.cc/150?img=${event.id}" alt="User" class="avatar">
-                                <span>+${Math.floor(Math.random() * 10) + 1} going</span>
-                            </div>
-                            <button class="btn view-details-btn" style="font-size: 0.9rem; padding: 8px 16px;">View Details</button>
-                        </div>
-                    </div>`;
-                eventsGrid.appendChild(card);
+        function displayMyEvents() {
+            myEventsGrid.innerHTML = '';
+            if (myEvents.length === 0) {
+                myEventsGrid.innerHTML = `<p style="text-align:center; grid-column: 1 / -1; color: #ccc;">You haven't joined any games yet. <a href="#" data-page="events-page" style="color: var(--emerald-green);">Find one now!</a></p>`;
+                return;
+            }
+            myEvents.forEach(eventId => {
+                const event = eventsData.find(e => e.id === eventId);
+                if(event) myEventsGrid.appendChild(createEventCard(event));
             });
-            gsap.from(".event-card", { duration: 0.5, opacity: 0, y: 30, stagger: 0.1, ease: 'power3.out' });
+            gsap.from("#my-events-grid .event-card", { duration: 0.5, autoAlpha: 0, y: 30, stagger: 0.1, ease: 'power3.out' });
         }
 
         filterBar.addEventListener('click', (e) => {
             if (e.target.matches('button.filter-btn')) {
                 filterBar.querySelector('.active').classList.remove('active');
                 e.target.classList.add('active');
-                displayEvents(e.target.dataset.filter);
+                displayAllEvents(e.target.dataset.filter);
             }
         });
 
-        // --- Event Modal Logic ---
-        const modal = document.getElementById('event-detail-modal');
-        eventsGrid.addEventListener('click', (e) => {
+        // --- MODAL LOGIC ---
+        function openModal(event) {
+            document.getElementById('modal-title').textContent = event.title;
+            document.getElementById('modal-banner').style.backgroundImage = `url('${event.image}')`;
+            document.getElementById('modal-description').textContent = event.description;
+            document.getElementById('modal-date').textContent = new Date(event.date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            document.getElementById('modal-location').textContent = event.location;
+            
+            const rsvpBtn = document.getElementById('rsvp-btn');
+            rsvpBtn.dataset.eventId = event.id;
+            if (myEvents.includes(event.id)) {
+                rsvpBtn.textContent = 'Already Joined';
+                rsvpBtn.disabled = true;
+                rsvpBtn.style.background = 'grey';
+            } else {
+                rsvpBtn.textContent = 'RSVP - Join Game';
+                rsvpBtn.disabled = false;
+                rsvpBtn.style.background = ''; // Revert to default
+            }
+
+            gsap.to(modal, { autoAlpha: 1, duration: 0.3 });
+            gsap.fromTo('.modal-container', { scale: 0.9 }, { scale: 1, duration: 0.3, ease: 'power2.out' });
+        }
+
+        function closeModal() {
+            gsap.to('.modal-container', { scale: 0.9, duration: 0.3, ease: 'power2.in' });
+            gsap.to(modal, { autoAlpha: 0, duration: 0.3, delay: 0.1 });
+        }
+
+        document.getElementById('modal-close-btn').addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+        
+        document.addEventListener('click', (e) => {
             if (e.target.matches('.view-details-btn')) {
                 const card = e.target.closest('.event-card');
                 const eventId = parseInt(card.dataset.eventId);
@@ -389,41 +449,41 @@
             }
         });
 
-        function openModal(event) {
-            document.getElementById('modal-title').textContent = event.title;
-            document.getElementById('modal-banner').style.backgroundImage = `url('${event.image}')`;
-            document.getElementById('modal-description').textContent = event.description;
-            document.getElementById('modal-date').textContent = new Date(event.date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-            document.getElementById('modal-location').textContent = event.location;
-            modal.classList.add('active');
-        }
+        // --- RSVP LOGIC ---
+        document.getElementById('rsvp-btn').addEventListener('click', function() {
+            const eventId = parseInt(this.dataset.eventId);
+            if (!myEvents.includes(eventId)) {
+                myEvents.push(eventId);
+                this.textContent = 'Joined!';
+                this.disabled = true;
+                this.style.background = 'grey';
+                gsap.fromTo(this, { scale: 1 }, { scale: 1.1, duration: 0.1, yoyo: true, repeat: 1, onComplete: () => {
+                    setTimeout(closeModal, 500);
+                }});
+            }
+        });
 
-        document.getElementById('modal-close-btn').addEventListener('click', () => modal.classList.remove('active'));
-        modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('active'); });
-
-        // --- Create Event Form Logic ---
+        // --- CREATE EVENT FORM ---
         document.getElementById('create-event-form').addEventListener('submit', (e) => {
             e.preventDefault();
             const newEvent = {
-                id: eventsData.length + 1,
+                id: Date.now(), // Use timestamp for unique ID
                 title: document.getElementById('event-title').value,
                 sport: document.getElementById('event-sport').value,
                 location: document.getElementById('event-location').value,
                 date: document.getElementById('event-date').value,
                 description: document.getElementById('event-description').value,
-                image: 'https://images.unsplash.com/photo-1565992441121-4367c2967103?q=80&w=1887&auto=format&fit=crop' // Default image
+                image: 'https://images.unsplash.com/photo-1565992441121-4367c2967103?q=80&w=1887&auto=format&fit=crop'
             };
-            eventsData.unshift(newEvent); // Add to the beginning of the array
+            eventsData.unshift(newEvent);
             e.target.reset();
             navigateTo('events-page');
-            displayEvents();
         });
 
-        // --- Initial Load ---
-        displayEvents();
-        gsap.registerPlugin(ScrollTrigger);
-        gsap.from('.navbar .logo, .nav-links a', { duration: 0.8, opacity: 0, y: -50, stagger: 0.1, ease: 'power3.out' });
-        gsap.from('.hero-title, .hero-subtitle, .search-form', { duration: 1, opacity: 0, y: 50, stagger: 0.2, ease: 'power3.out', delay: 0.5 });
+        // --- INITIAL LOAD ---
+        displayAllEvents();
+        gsap.from('.desktop-nav .logo, .nav-links a', { duration: 0.8, opacity: 0, y: -50, stagger: 0.1, ease: 'power3.out' });
+        gsap.from('#hero h1, #hero p, .search-form', { duration: 1, opacity: 0, y: 50, stagger: 0.2, ease: 'power3.out', delay: 0.5 });
     });
     </script>
 </body>
