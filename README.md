@@ -76,4 +76,4 @@ Follow these steps to set up the project locally.
 
 1. **Clone the repo**
    ```sh
-   git clone [https://github.com/your-username/vibekhel.git](https://github.com/your-username/vibekhel.git)
+   git clone [https://github.com/challakalyan1729/vibekhel.git](https://github.com/challakalyan1729/vibekhel.git)
